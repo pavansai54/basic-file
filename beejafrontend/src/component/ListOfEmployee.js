@@ -1,7 +1,12 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment,useState } from 'react';
 import Styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
-// import history from './../History';
+//  import history from './../History';
+import { useQuery, gql,useMutation } from '@apollo/client';
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faEdit,faTrash} from '@fortawesome/free-solid-svg-icons'
+
+
 const Navbar = Styled.nav`
 background-color: ${(props) => props.bgColor};
 position: sticky;
@@ -52,7 +57,7 @@ const TableData = Styled.td`
 border: 1px solid #ddd;
 height: 30px;
 vertical-align: bottom;
-text-align: left;
+text-align:left;
 `;
 const TableHeading = Styled.th`
 border: 1px solid #ddd;
@@ -67,87 +72,121 @@ display:inline-block;
 background-color:rgba(255,255,255,0.7);
 border:1px solid gray;
 `;
-const TriangleButton =Styled(Actionbutton)`
-border-left: 7px solid transparent;
-border-right:7px solid transparent;
-border-top: 6px dashed;
-`;
+
+// const TriangleButton = Styled(Actionbutton)`
+// border-left: 7px solid transparent;
+// border-right:7px solid transparent;
+// border-top: 6px dashed;
+// `;
 const LinkTag = Styled(Link)`
 color:black;
 text-decoration:none;
 `;
-export const listofemployee =()=> {
-        return (
-            <Fragment>
-                {/* <Navbar bgColor="powderblue" color="black">
+const Show = gql`
+{
+    employeeList{
+    id
+    name
+    code
+    email
+    role
+    department
+    joinedDate
+    mobileNo
+    }
+  }`;
+
+  
+
+  
+export const ListOfEmployee = () => {
+
+    const [empId,setEmpId]= useState("");
+
+    const DELETE_Employee = gql`
+    mutation{
+    deleteEmployee(id: "${empId}"){
+    respCode,
+    respMessage
+  }
+}
+`;
+    
+    const { loading, error, data } = useQuery(Show);
+
+    const [deleteMutation] = useMutation(DELETE_Employee);
+
+    
+    const handleDelete =(id)=>{
+        setEmpId(id);
+        console.log(empId);
+        deleteMutation();
+    
+    };
+
+    if (loading) return <p>Loading ...</p>;
+    if (error) return <p>Error</p>;
+
+
+    return (
+       
+        <Fragment>
+            {/* <Navbar bgColor="powderblue" color="black">
                     <Logo src={require("../images/Logo.png")} /> Beeja
                 </Navbar> */}
-                <Navbar bgColor="grey" color="white">
-                    List of Employee
+            <Navbar bgColor="grey" color="white">
+                List of Employee
                     <Button >
-                        <LinkTag to ={"/adding"}>Add Employee</LinkTag>
-                        </Button>
-                </Navbar>
-                <Break />
-                <Container>
-                    <Table>
+                    <LinkTag to={"/adding"}>Add Employee</LinkTag>
+                </Button>
+            </Navbar>
+            <Break />
+            <Container>
+                <Table>
+                    <TableRow>
+                        <TableHeading> ID</TableHeading>
+                        <TableHeading>Employee Name</TableHeading>
+                        <TableHeading>Code</TableHeading>
+                        <TableHeading>Email</TableHeading>
+                        <TableHeading>Role</TableHeading>
+                        <TableHeading>Department</TableHeading>
+                        <TableHeading>JoiningDate</TableHeading>
+                        <TableHeading>MobileNumber</TableHeading>
+                        <TableHeading>Edit</TableHeading>
+                        <TableHeading>Delete</TableHeading>
+                    </TableRow>
+                    
+
+                    {data.employeeList.map((employee, id) => (
                         <TableRow>
-                            <TableHeading> S.No</TableHeading>
-                            <TableHeading>Employee Name</TableHeading>
-                            <TableHeading>Role</TableHeading>
-                            <TableHeading>Department</TableHeading>
-                            <TableHeading>Join Date</TableHeading>
-                            <TableHeading> </TableHeading>
-                        </TableRow>
-                        <TableRow>
-                            <TableData>1.</TableData>
-                            <TableData>shiva</TableData>
-                            <TableData>it</TableData>
-                            <TableData>EEE</TableData>
-                            <TableData>8989898</TableData>
-                            <TableData >
-                                    <Actionbutton ><TriangleButton/></Actionbutton>
+                            <TableData key={id}>{employee.id}</TableData>
+                            <TableData>{employee.name}</TableData>
+                            <TableData>{employee.code}</TableData>
+                            <TableData>{employee.email}</TableData>
+                            <TableData>{employee.role}</TableData>
+                            <TableData>{employee.department}</TableData>
+                            <TableData>{employee.joinedDate}</TableData>
+                            <TableData>{employee.mobileNo}</TableData>
+
+                            <TableData style={{ "text-align": "center" }} >
+                            <LinkTag to={"/edit"}>
+                                <FontAwesomeIcon icon={faEdit} ></FontAwesomeIcon>
+                                </LinkTag>
                             </TableData>
+                            
+                            
+                            <TableData style={{ "text-align": "center" }} >
+                                {/* <Button onClick={DeleteEmployee}>-</Button> */}
+                                    <Button onClick={()=>handleDelete(employee.id)} >
+                                    <FontAwesomeIcon icon={faTrash}></FontAwesomeIcon> 
+                                    </Button>
+                             </TableData>
+                    
                         </TableRow>
-                        <TableRow>
-                            <TableData>2</TableData>
-                            <TableData>shiva</TableData>
-                            <TableData>it</TableData>
-                            <TableData>EEE</TableData>
-                            <TableData>8989898</TableData>
-                            <TableData> </TableData>
-                        </TableRow>
-                        <TableRow>
-                            <TableData>3.</TableData>
-                            <TableData>shiva</TableData>
-                            <TableData>it</TableData>
-                            <TableData>EEE</TableData>
-                            <TableData>8989898</TableData>
-                            <TableData> </TableData>
-                        </TableRow><TableRow>
-                            <TableData>1.</TableData>
-                            <TableData>shiva</TableData>
-                            <TableData>it</TableData>
-                            <TableData>EEE</TableData>
-                            <TableData>8989898</TableData>
-                            <TableData> </TableData>
-                        </TableRow><TableRow>
-                            <TableData>1.</TableData>
-                            <TableData>shiva</TableData>
-                            <TableData>it</TableData>
-                            <TableData>EEE</TableData>
-                            <TableData>8989898</TableData>
-                            <TableData> </TableData>
-                        </TableRow><TableRow>
-                            <TableData>1.</TableData>
-                            <TableData>shiva</TableData>
-                            <TableData>it</TableData>
-                            <TableData>EEE</TableData>
-                            <TableData>8989898</TableData>
-                            <TableData> </TableData>
-                        </TableRow>
-                    </Table>
-                </Container>
-                </Fragment>
-        )
-    }
+                    )
+                    )}
+                </Table>
+            </Container>
+        </Fragment>
+    )
+}

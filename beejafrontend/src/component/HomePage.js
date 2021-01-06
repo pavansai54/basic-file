@@ -2,6 +2,9 @@ import React, { Component, Fragment } from 'react'
 import Styled from '@emotion/styled';
 import ListsofEmployees from "./ListOfEmployee";
 import {Link} from 'react-router-dom';
+import { useQuery, gql,useMutation } from '@apollo/client';
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faEdit,faTrash} from '@fortawesome/free-solid-svg-icons';
 
 const Navbar = Styled.nav`
 background-color: ${(props) => props.bgColor};
@@ -39,7 +42,24 @@ const TableRow = Styled.tr`
 border: 3px solid #ddd;
  &:nth-child(even){background-color: #F2F2F2;}
 `;
-export const homepage =()=>{
+const Button = Styled.button`
+color:black;
+background-color: ${props =>
+props.save ? 'powderblue' : 'white'};
+height:30px;
+font-size:20px;
+width:80px;
+border-radius:5px;
+&:hover {
+opacity:0.5;
+`;
+
+export const HomePage =()=>{
+
+    
+    // if (loading) return <p>Loading ...</p>;
+    // if (error) return <p>Error</p>;
+
         return (
             <Fragment>
                 {/* <Navbar bgColor="powderblue" color="black">
@@ -58,7 +78,11 @@ export const homepage =()=>{
                             </LinkTag>
                             </TableData></TableRow>
                         <TableRow><TableData> CLIENT</TableData></TableRow>
-                        <TableRow><TableData> DOCUMENTATION</TableData></TableRow>
+                       {/* {data.deleteEmployee.map((id) =>( */}
+                        <TableRow><TableData> 
+                            
+                             </TableData></TableRow>
+                              {/* ))}  */}
                        </TableRow>
                     </Table>
             </Fragment>

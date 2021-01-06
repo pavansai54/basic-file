@@ -73,7 +73,7 @@ padding:4px;
 `;
 const Break = Styled.br`
 `;
-export  const loginpage = () => {
+export  const LoginPage = () => {
   return(
   <>
     <Header />
@@ -91,11 +91,14 @@ export  const loginpage = () => {
       <Input placeholder="Password" type="password" required />
       <Break />
       <Break />
-      <Button type="submit" >
+      
         <LinkTag to={"/home"}>
-          Login
+        <Button type="submit" >
+        Login
+        </Button>
+         
         </LinkTag>
-      </Button>
+     
     </RightSplit>
     <Footer/>
   </>

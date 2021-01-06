@@ -2,8 +2,6 @@ import React, { Fragment, useState } from 'react'
 import Styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
 import { useMutation, gql } from '@apollo/client';
-import {toast} from 'react-toastify';  
-import 'react-toastify/dist/ReactToastify.css';
 
 // import {gql} from 'graphql-tag'
 
@@ -43,7 +41,7 @@ const Option = Styled.option`
 const Button = Styled.button`
 color:black;
 background-color: ${props =>
-props.save ? 'powderblue' : 'white'};
+        props.save ? 'powderblue' : 'white'};
 height:30px;
 font-size:20px;
 width:80px;
@@ -69,8 +67,29 @@ const LinkTag = Styled(Link)`
 color:black; 
 text-decoration:none;
 `;
+//  const MUTATION = gql`
+//   mutation  {
+//   createEmployee{
+//       name
+//       code
+//       email
+//       mobileNo
+//       department
+//       role
+//       joinDate
 
-export const CreateEmployee = () => {
+//     }
+//   }
+// `;
+
+export const EditEmployee = () => {
+
+    const EDIT_USER = gql`
+    mutation($id: String!, $name: String!,$code: String!, $email: String, $mobileNo: String!, $department: String!, $role: String!) {
+       updateEmployee(id: $id, name: $name, code: $code, email: $email, mobileNo: $mobileNo, department: $department, role: $role)
+    }
+  `;
+
 
     const [formData, updateFormData] = useState({
         username: "",
@@ -81,11 +100,7 @@ export const CreateEmployee = () => {
         role: "",
         joinDate: ""
     });
-    // toast.configure() 
-    // const remind = (message)=>{  
-    //     toast.success(message,
-    //     {position: toast.POSITION.BOTTOM_RIGHT})  
-    //   }
+
 
     const EmployeeList = gql`
      mutation {
@@ -103,43 +118,37 @@ export const CreateEmployee = () => {
                   }
               }
           `;
+          const [editMutation] = useMutation(EDIT_USER, { variables: { id: "67", name: "Username", email: "email" }});
     const [EmployeeCreate, { loading, error, data }] = useMutation(EmployeeList);
-    if (loading) {
-        return <p>Loading....</p>
-    } 
-    if (error) {
-        console.log(error)
-        return <p></p>
-    }
-    if (data) {
-        console.log(data)
-        
-        // return <p>{remind(data.respMessage)}</p>
-    } 
-
+    if (loading) return <p>Loading....</p>
+    if (error) return 
+    
     const handleChange = (e) => {
         updateFormData({
             ...formData,
             [e.target.name]: e.target.value.trim()
         });
     };
+
     const handleSubmit = (e) => {
         e.preventDefault()
+        console.log(formData);
         EmployeeCreate();
     };
-    
+
     return (
-        
         <Fragment>
             {/* <Navbar bgColor="powderblue" color="black">
                         <Logo src={require("../images/Logo.png")}></Logo> Beeja
                         </Navbar> */}
             <Navbar bgColor="grey" color="white">
-                Create an Employee
+                Edit an Employee
                         </Navbar>
             <Break />
             <Container >
+
                 <Table >
+
                     <TableRow>
                         <TableColumn ><Lable htmlFor="Name"> Name: </Lable></TableColumn>
                         <TableColumn ><Input type="text" name="username" onChange={handleChange} required /></TableColumn>
@@ -189,16 +198,13 @@ export const CreateEmployee = () => {
                     </TableRow>
                     <Break />
                     <TableRow>
-                        <TableColumn >
-                             <Button type="Cancel">
-                                   <LinkTag to={"/list"}>Cancel</LinkTag>
-                             </Button>
-                         </TableColumn>
-                        <TableColumn>
-                             <Button  onClick={handleSubmit}>Submit
-                                 
-                             </Button>
-                       </TableColumn>
+                        <TableColumn ><Button type="Cancel">
+                        <LinkTag to={"/list"}>Cancel</LinkTag>
+                             </Button></TableColumn>
+                        <TableColumn><Button onClick={editMutation}>
+                        <LinkTag to={"/list"}>
+                        Submit
+                        </LinkTag></Button></TableColumn>
                     </TableRow>
 
                 </Table>
