@@ -61,7 +61,8 @@ export const HomePage = () => {
 
     // if (loading) return <p>Loading ...</p>;
     // if (error) return <p>Error</p>;
-
+ 
+    
     return (
         <Fragment>
             {/* <Navbar bgColor="powderblue" color="black">

@@ -72,22 +72,12 @@ text-decoration:none;
 
 export const EditEmployee = () => {
 
-    const How = gql`
-    query Employee($id: String!){
-    employee(id: $id){
-        name
-        code
-        email
-        role
-        department
-        joinedDate
-        mobileNo
-        respCode,
-   }
-}
-`;
+   
+
+
     const { id } = useParams();
-    
+    const initialFormState = { id: null, username: '' }
+    const [currentUser,setCurrentUser] = useState(initialFormState)
    
     const [empState, setState] = useState({
         username:"",
@@ -97,8 +87,23 @@ export const EditEmployee = () => {
         department: "",
         role: "",
         joinDate: ""
-    });
+    }, false);
 
+    const GetEmployeeById =gql`
+    query EmpDetails($id:String!){
+        employee(id:$id){
+            name
+            code
+            email
+            mobileNo
+            department
+            role
+            joinedDate
+        }
+    }
+    `;
+
+    
     const EmployeeEdit = gql`
      mutation UpdateEmployee($id: String!){
          updateEmployee(id: $id,data: {
@@ -115,21 +120,17 @@ export const EditEmployee = () => {
                   }
               }
           `;
-    const {loading,error,data} = useQuery(How,{variables:{id:id}});
+    const {loading,error,data
+    } = useQuery(GetEmployeeById,{variables:{id:id}});
     const[EditMutation, ] = useMutation(EmployeeEdit);
     if (loading) return <p>Loading....</p>
     if (error) return <p>ERROR....</p>
-    if (data){
-        // setState({
-        // username: (data.employee.name),
-        // code: (data.employee.code),
-        // email: (data.employee.email),
-        // mobileno: (data.employee.mobileno),
-        // department: (data.employee.department),
-        // role:(data.employee.role),
-        // Joindate: (data.employee.Joindate),
-        // })
-      };
+    if (data) {
+       return setCurrentUser({ id: data.employee.id, username: data.employee.name })
+    //    currentUser = data.employee
+    }
+   
+   
       
       const handleChange = (e) => {
         setState({
@@ -142,7 +143,15 @@ export const EditEmployee = () => {
         e.preventDefault();
         console.log(empState);
         EditMutation({variables:{id:id}});
+    
       };
+
+      const handleInputChange = (event) => {
+        const { name, value } = event.target
+    
+        setCurrentUser({ ...currentUser, [name]: value })
+      }
+    
 
     return (
         <Fragment>
@@ -159,29 +168,29 @@ export const EditEmployee = () => {
                        
                         <TableRow>
 
-                            <TableColumn ><Lable htmlFor="Name"> Name:{empState.name}</Lable></TableColumn>
-                            <TableColumn ><Input type="text" name="username" onChange={handleChange} value={empState.username} required /></TableColumn>
+                            <TableColumn ><Lable htmlFor="Name"> Name:</Lable></TableColumn>
+                            <TableColumn ><Input type="text" value={currentUser.username} name="username"  required /></TableColumn>
                         </TableRow>
                         <Break />
                         <TableRow>
                             <TableColumn ><Lable htmlFor="Empl-Id"> Employee Id: </Lable></TableColumn>
-                            <TableColumn><Input type="text" name="code" onChange={handleChange} value={empState.code} required /></TableColumn>
+                            <TableColumn><Input type="text" name="code" onChange={handleChange}  required /></TableColumn>
                         </TableRow>
                         <Break />
                         <TableRow>
                             <TableColumn ><Lable htmlFor="Email"> Email: </Lable></TableColumn>
-                            <TableColumn><Input type="email" name="email" onChange={handleChange} value={empState.email} required /></TableColumn>
+                            <TableColumn><Input type="email" name="email" onChange={handleChange}  required /></TableColumn>
                         </TableRow>
                         <Break />
                         <TableRow>
                             <TableColumn > <Lable htmlFor="Mobile Number"> Mobile Number: </Lable></TableColumn>
-                            <TableColumn><Input placeholder=" +91 " name="mobileNO" onChange={handleChange} type="number" value={empState.mobileNO} required /></TableColumn>
+                            <TableColumn><Input placeholder=" +91 " name="mobileNO" onChange={handleChange} type="number"  required /></TableColumn>
                         </TableRow>
                         <Break />
                         <TableRow>
                             <TableColumn > <Lable htmlFor="Department"> Department: </Lable></TableColumn>
-                            <TableColumn><SelectBox className="Selectbox1" name="department" onChange={handleChange} value={empState.department} required>
-                                <Option disabled selected value> Select an Option</Option>
+                            <TableColumn><SelectBox className="Selectbox1" name="department" onChange={handleChange} required>
+                            <Option disabled selected value> Select an Option</Option>
                                 <Option value="HR"> HR </Option>
                                 <Option value="ADMIN"> ADMIN </Option>
                                 <Option value="ACCOUNTING"> ACCOUNTING </Option>
@@ -191,7 +200,7 @@ export const EditEmployee = () => {
                         <Break />
                         <TableRow>
                             <TableColumn ><Lable htmlFor="Role"> Role: </Lable></TableColumn>
-                            <TableColumn><SelectBox className="Selectbox1" name="role" onChange={handleChange} value={empState.role} required>
+                            <TableColumn><SelectBox className="Selectbox1" name="role" onChange={handleChange}  required>
                                 <Option disabled selected value> Select an Option</Option>
                                 <Option value="ADMIN"> ADMIN </Option>
                                 <Option value="SUPER ADMIN"> SUPER ADMIN </Option>
@@ -203,7 +212,7 @@ export const EditEmployee = () => {
                         <Break />
                         <TableRow>
                             <TableColumn > <Lable htmlFor="Date-Containerat" className="Selectbox1"> Join Date: </Lable></TableColumn>
-                            <TableColumn> <Input type="date" placeholder="dd-mm-yyyy" name="joinDate" onChange={handleChange} value={empState.joinDate} required /></TableColumn>
+                            <TableColumn> <Input type="date" placeholder="dd-mm-yyyy" name="joinDate" onChange={handleChange}  required /></TableColumn>
                         </TableRow>
                         <Break />
                         <TableRow>

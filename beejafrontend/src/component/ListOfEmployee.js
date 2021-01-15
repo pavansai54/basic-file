@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { useQuery, gql, useMutation } from '@apollo/client';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
-
+// import { from } from 'apollo-boost';
 const Navbar = Styled.nav`
 background-color: ${(props) => props.bgColor};
 position: sticky;
@@ -71,6 +71,11 @@ display:inline-block;
 background-color:rgba(255,255,255,0.7);
 border:1px solid gray;
 `;
+const IdButton = Styled.button`
+border:none;
+outline:none;
+    `;
+
 
 // const TriangleButton = Styled(Actionbutton)`
 // border-left: 7px solid transparent;
@@ -83,7 +88,8 @@ text-decoration:none;
 `;
 
 export const ListOfEmployee = () => {
-    
+
+
     const Show = gql`
 {
     employeeList{
@@ -108,23 +114,29 @@ export const ListOfEmployee = () => {
   }
 }
 `;
-    const {loading, error, data } = useQuery(Show);
 
-    const [deleteMutation] = useMutation(DELETE_Employee);
 
+const { loading, error, data } = useQuery(Show);
+
+const [deleteMutation] = useMutation(DELETE_Employee);
+
+
+
+   
     const handleDelete = (deleteId) => {
-        setEmpId({ 'idToDelete': deleteId });
-        console.log("handleDelte", deleteId, empId);
-        deleteMutation({ variables: { id: deleteId } });
+        if (window.confirm("Do you really want to leave?")) {
+            setEmpId({ 'idToDelete': deleteId });
+            console.log("handleDelte", deleteId, empId);
+            deleteMutation({ variables: { id: deleteId } });
+
+        }
+        else {
+
+        }
     };
-
-
 
     if (loading) return <p>Loading ...</p>;
     if (error) return <p>Error</p>;
-
-   
-       
 
     return (
 
@@ -155,10 +167,11 @@ export const ListOfEmployee = () => {
                         <TableHeading>Delete</TableHeading>
                     </TableRow>
 
-
                     {data.employeeList.map((employee, id) => (
                         <TableRow>
-                            <TableData key={id}>{employee.id}</TableData>
+                            <IdButton >
+                                <TableData key={id}>{employee.id}</TableData>
+                            </IdButton>
                             <TableData>{employee.name}</TableData>
                             <TableData>{employee.code}</TableData>
                             <TableData>{employee.email}</TableData>
@@ -178,6 +191,7 @@ export const ListOfEmployee = () => {
                                 </Button>
                             </TableData>
                         </TableRow>
+                        
                     )
                     )}
                 </Table>
