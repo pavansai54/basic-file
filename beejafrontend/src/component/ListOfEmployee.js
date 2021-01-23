@@ -1,6 +1,6 @@
-import React, { Component, Fragment, useState } from 'react';
+import React, { Component, Fragment, useState, } from 'react';
 import Styled from '@emotion/styled';
-import { Link } from 'react-router-dom';
+import { Link ,useParams} from 'react-router-dom';
 //  import history from './../History';
 import { useQuery, gql, useMutation } from '@apollo/client';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -86,9 +86,14 @@ const LinkTag = Styled(Link)`
 color:black;
 text-decoration:none;
 `;
+const Hover =Styled.a`
+&:hover {
+    color:blue;
+`;
 
 export const ListOfEmployee = () => {
 
+    const { id } = useParams();
 
     const Show = gql`
 {
@@ -115,13 +120,9 @@ export const ListOfEmployee = () => {
 }
 `;
 
-
-const { loading, error, data } = useQuery(Show);
+const { loading, error, data} = useQuery(Show);
 
 const [deleteMutation] = useMutation(DELETE_Employee);
-
-
-
    
     const handleDelete = (deleteId) => {
         if (window.confirm("Do you really want to leave?")) {
@@ -134,10 +135,10 @@ const [deleteMutation] = useMutation(DELETE_Employee);
 
         }
     };
-
+    
     if (loading) return <p>Loading ...</p>;
     if (error) return <p>Error</p>;
-
+  
     return (
 
         <Fragment>
@@ -169,9 +170,14 @@ const [deleteMutation] = useMutation(DELETE_Employee);
 
                     {data.employeeList.map((employee, id) => (
                         <TableRow>
-                            <IdButton >
-                                <TableData key={id}>{employee.id}</TableData>
-                            </IdButton>
+                            <a href="">
+                        <LinkTag to={`/display/${employee.id}`}>
+                               <Hover> 
+                                   <TableData key={id}>{employee.id}</TableData>
+                               </Hover>
+                                </LinkTag>
+                                </a>
+                            
                             <TableData>{employee.name}</TableData>
                             <TableData>{employee.code}</TableData>
                             <TableData>{employee.email}</TableData>

@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { useQuery, gql, useMutation } from '@apollo/client';
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import './images/mobile_black.png';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -56,17 +57,25 @@ border-radius:5px;
 opacity:0.5;
 `;
 
+
+ 
+    window.onpopstate= function()
+    {
+        alert("Are you sure want to leave this page");
+    }
+    
 export const HomePage = () => {
 
+    // if (window.confirm("Do you really want to leave?")) {
 
     // if (loading) return <p>Loading ...</p>;
     // if (error) return <p>Error</p>;
  
-    
     return (
+        
         <Fragment>
             {/* <Navbar bgColor="powderblue" color="black">
-                    <Logo src={require("../images/Logo.png") } /> Beeja
+                    <Logo src={require("./images/mobile_black.png") } /> Beeja
                 </Navbar> */}
             <Navbar bgColor="grey" color="white" text="center">
                 Home page
@@ -81,12 +90,12 @@ export const HomePage = () => {
                              </LinkTag>
                     </TableData></TableRow>
                     <TableRow><TableData> CLIENT</TableData></TableRow>
-                    <TableRow><TableData>
-                        <Button >
+                    
+                    <TableRow ><TableData>
+                
                         DOCUMENTATION
-                        </Button>
-                             </TableData></TableRow>
-
+                        </TableData></TableRow>
+                             
                 </TableRow>
             </Table>
         </Fragment>

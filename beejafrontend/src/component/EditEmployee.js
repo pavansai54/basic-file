@@ -72,24 +72,20 @@ text-decoration:none;
 
 export const EditEmployee = () => {
 
-   
-
-
     const { id } = useParams();
-    const initialFormState = { id: null, username: '' }
-    const [currentUser,setCurrentUser] = useState(initialFormState)
-   
+
+
     const [empState, setState] = useState({
-        username:"",
+        username: "",
         code: "",
         email: " ",
-        mobileNO: "",
+        mobileNo: "",
         department: "",
         role: "",
-        joinDate: ""
-    }, false);
+        joinedDate: ""
+    })
 
-    const GetEmployeeById =gql`
+    const GetEmployeeById = gql`
     query EmpDetails($id:String!){
         employee(id:$id){
             name
@@ -103,134 +99,119 @@ export const EditEmployee = () => {
     }
     `;
 
-    
     const EmployeeEdit = gql`
      mutation UpdateEmployee($id: String!){
          updateEmployee(id: $id,data: {
               name:"${empState.username}",
               code:"${empState.code}",
               email:"${empState.email}",
-              mobileNo:"${empState.mobileNO}",
+              mobileNo:"${empState.mobileNo}",
               department:"${empState.department}",
               role:"${empState.role}",
-             joinedDate:"${empState.joinDate}"   
+             joinedDate:"${empState.joinedDate}"   
            })
            {
               respCode, respMessage
                   }
               }
           `;
-    const {loading,error,data
-    } = useQuery(GetEmployeeById,{variables:{id:id}});
-    const[EditMutation, ] = useMutation(EmployeeEdit);
+    const { loading, error, data } = useQuery(GetEmployeeById, { variables: { id: id } });
+
+    const [EditMutation,] = useMutation(EmployeeEdit);
     if (loading) return <p>Loading....</p>
     if (error) return <p>ERROR....</p>
-    if (data) {
-       return setCurrentUser({ id: data.employee.id, username: data.employee.name })
-    //    currentUser = data.employee
-    }
-   
-   
-      
-      const handleChange = (e) => {
-        setState({
-          ...empState,
-          [e.target.name]: e.target.value.trim(),
-        });
-      };
 
-      const handleSubmit = (e) => {
+    const handleChange = (e) => {
+        setState({
+            ...empState,
+            [e.target.name]: e.target.value.trim(),
+        });
+    };
+
+    const handleSubmit = (e) => {
         e.preventDefault();
         console.log(empState);
-        EditMutation({variables:{id:id}});
-    
-      };
+        EditMutation({ variables: { id: id } });
 
-      const handleInputChange = (event) => {
-        const { name, value } = event.target
-    
-        setCurrentUser({ ...currentUser, [name]: value })
-      }
-    
+    };
 
     return (
         <Fragment>
-            {/* <Navbar bgColor="powderblue" color="black">
-                        <Logo src={require("../images/Logo.png")}></Logo> Beeja
-                        </Navbar> */}
+
             <Navbar bgColor="grey" color="white">
                 Edit an Employee
                         </Navbar>
             <Break />
             <Container >
-                
-                    <Table >
-                       
-                        <TableRow>
 
-                            <TableColumn ><Lable htmlFor="Name"> Name:</Lable></TableColumn>
-                            <TableColumn ><Input type="text" value={currentUser.username} name="username"  required /></TableColumn>
-                        </TableRow>
-                        <Break />
-                        <TableRow>
-                            <TableColumn ><Lable htmlFor="Empl-Id"> Employee Id: </Lable></TableColumn>
-                            <TableColumn><Input type="text" name="code" onChange={handleChange}  required /></TableColumn>
-                        </TableRow>
-                        <Break />
-                        <TableRow>
-                            <TableColumn ><Lable htmlFor="Email"> Email: </Lable></TableColumn>
-                            <TableColumn><Input type="email" name="email" onChange={handleChange}  required /></TableColumn>
-                        </TableRow>
-                        <Break />
-                        <TableRow>
-                            <TableColumn > <Lable htmlFor="Mobile Number"> Mobile Number: </Lable></TableColumn>
-                            <TableColumn><Input placeholder=" +91 " name="mobileNO" onChange={handleChange} type="number"  required /></TableColumn>
-                        </TableRow>
-                        <Break />
-                        <TableRow>
-                            <TableColumn > <Lable htmlFor="Department"> Department: </Lable></TableColumn>
-                            <TableColumn><SelectBox className="Selectbox1" name="department" onChange={handleChange} required>
+                <Table >
+
+                    <TableRow>
+
+                        <TableColumn ><Lable htmlFor="Name"> Name:</Lable></TableColumn>
+                        <TableColumn ><Input type="text" name="username" defaultValue={data.employee.name} onChange={handleChange} required /></TableColumn>
+
+                    </TableRow>
+                    <Break />
+                    <TableRow>
+                        <TableColumn ><Lable htmlFor="Empl-Id"> Employee Id: </Lable></TableColumn>
+                        <TableColumn><Input type="text" name="code" defaultValue={data.employee.code} onChange={handleChange} required /></TableColumn>
+                    </TableRow>
+                    <Break />
+                    <TableRow>
+                        <TableColumn ><Lable htmlFor="Email"> Email: </Lable></TableColumn>
+                        <TableColumn><Input type="email" name="email" defaultValue={data.employee.email} onChange={handleChange} required /></TableColumn>
+                    </TableRow>
+                    <Break />
+                    <TableRow>
+                        <TableColumn > <Lable htmlFor="Mobile Number"> Mobile Number: </Lable></TableColumn>
+                        <TableColumn><Input placeholder=" +91 " name="mobileNo" defaultValue={data.employee.mobileNo} onChange={handleChange} type="number" required /></TableColumn>
+                    </TableRow>
+                    <Break />
+                    <TableRow>
+                        <TableColumn > <Lable htmlFor="Department"> Department: </Lable></TableColumn>
+                        <TableColumn><SelectBox className="Selectbox1" name="department" defaultValue={data.employee.department} onChange={handleChange} required>
                             <Option disabled selected value> Select an Option</Option>
-                                <Option value="HR"> HR </Option>
-                                <Option value="ADMIN"> ADMIN </Option>
-                                <Option value="ACCOUNTING"> ACCOUNTING </Option>
-                                <Option value="IT"> IT </Option>
-                            </SelectBox></TableColumn>
-                        </TableRow>
-                        <Break />
-                        <TableRow>
-                            <TableColumn ><Lable htmlFor="Role"> Role: </Lable></TableColumn>
-                            <TableColumn><SelectBox className="Selectbox1" name="role" onChange={handleChange}  required>
-                                <Option disabled selected value> Select an Option</Option>
-                                <Option value="ADMIN"> ADMIN </Option>
-                                <Option value="SUPER ADMIN"> SUPER ADMIN </Option>
-                                <Option value="ACCOUNTANT"> ACCOUNTANT </Option>
-                                <Option value="SOFTWARE ENGINEER"> SOFTWARE ENGINEER </Option>
-                                <Option value="SENIOR-SOFTWARE ENGINEER"> SENIOR-SOFTWARE ENGINEER </Option>
-                            </SelectBox></TableColumn>
-                        </TableRow>
-                        <Break />
-                        <TableRow>
-                            <TableColumn > <Lable htmlFor="Date-Containerat" className="Selectbox1"> Join Date: </Lable></TableColumn>
-                            <TableColumn> <Input type="date" placeholder="dd-mm-yyyy" name="joinDate" onChange={handleChange}  required /></TableColumn>
-                        </TableRow>
-                        <Break />
-                        <TableRow>
-                            <TableColumn ><Button type="Cancel">
-                                <LinkTag to={"/list"}>Cancel</LinkTag>
-                            </Button></TableColumn>
+                            <Option value="HR"> HR </Option>
+                            <Option value="ADMIN"> ADMIN </Option>
+                            <Option value="ACCOUNTING"> ACCOUNTING </Option>
+                            <Option value="IT"> IT </Option>
+                        </SelectBox></TableColumn>
+                    </TableRow>
+                    <Break />
+                    <TableRow>
+                        <TableColumn ><Lable htmlFor="Role"> Role: </Lable></TableColumn>
+                        <TableColumn><SelectBox className="Selectbox1" name="role" defaultValue={data.employee.role} onChange={handleChange} required>
+                            <Option disabled selected value> Select an Option</Option>
+                            <Option value="ADMIN"> ADMIN </Option>
+                            <Option value="SUPER ADMIN"> SUPER ADMIN </Option>
+                            <Option value="ACCOUNTANT"> ACCOUNTANT </Option>
+                            <Option value="SOFTWARE ENGINEER"> SOFTWARE ENGINEER </Option>
+                            <Option value="SENIOR-SOFTWARE ENGINEER"> SENIOR-SOFTWARE ENGINEER </Option>
+                        </SelectBox></TableColumn>
+                    </TableRow>
+                    <Break />
+                    <TableRow>
+                        <TableColumn > <Lable htmlFor="Date-Containerat" className="Selectbox1"> Join Date: </Lable></TableColumn>
+                        <TableColumn> <Input type="date" placeholder="dd-mm-yyyy" name="joinedDate" defaultValue={data.employee.joinedDate} onChange={handleChange} required /></TableColumn>
+                    </TableRow>
+                    <Break />
+                    <TableRow>
+                        <TableColumn ><Button type="Cancel">
+                            <LinkTag to={"/list"}>Cancel</LinkTag>
+                        </Button></TableColumn>
 
 
-                            <TableColumn><Button onClick={handleSubmit}>
-                                <LinkTag to={"/list"}>
-                        Submit
+                        <TableColumn><Button onClick={handleSubmit}>
+                            <LinkTag to={"/list"}>
+                                Submit
                         </LinkTag>
-                            </Button></TableColumn>
+                        </Button></TableColumn>
 
-                        </TableRow>
+                    </TableRow>
 
-                    </Table>
-                
+                </Table>
+
             </Container>
 
         </Fragment>
