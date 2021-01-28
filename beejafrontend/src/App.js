@@ -7,6 +7,10 @@ import { ListOfEmployee } from "./component/ListOfEmployee";
 import { CreateEmployee } from "./component/CreateEmployee";
 import { EditEmployee } from "./component/EditEmployee";
 import {EmployeeDetails} from "./component/EmployeeDetails";
+import {DetailsEmployee} from "./component/DetailsEmployee";
+import {Hr} from "./component/Hrpage";
+import {PersonalDetails} from "./component/PersonalDetails";
+import { CreatePersonal } from "./component/CreatePersonal";
 import './App.css';
 function App() {
   return (
@@ -19,6 +23,10 @@ function App() {
         <Route exact path="/adding" component={CreateEmployee} />
         <Route exact path="/edit/:id/" component={EditEmployee} />
         <Route exact path="/display/:id/" component={EmployeeDetails}/>
+        <Route exact path="/read/:id/" component={DetailsEmployee}/>
+        <Route exact path="/hr" component={Hr}/>
+        <Route exact path="/personal" component={PersonalDetails}/>
+        <Route exact path="/personalData" component={CreatePersonal}/>
       </Switch>
     </Router>
   );

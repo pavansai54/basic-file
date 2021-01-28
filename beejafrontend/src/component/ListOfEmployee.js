@@ -1,10 +1,10 @@
 import React, { Component, Fragment, useState, } from 'react';
 import Styled from '@emotion/styled';
-import { Link ,useParams} from 'react-router-dom';
+import { Link ,useParams,useHistory} from 'react-router-dom';
 //  import history from './../History';
 import { useQuery, gql, useMutation } from '@apollo/client';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faEdit, faSearch, faTrash } from '@fortawesome/free-solid-svg-icons'
 // import { from } from 'apollo-boost';
 const Navbar = Styled.nav`
 background-color: ${(props) => props.bgColor};
@@ -108,8 +108,26 @@ export const ListOfEmployee = () => {
     mobileNo
     }
   }`;
+  const GetEmployeeById = gql`
+  query EmpDetails($id:String!){
+      employee(id:$id){
+          name
+          code
+          email
+          mobileNo
+          department
+          role
+          joinedDate
+      }
+  }
+  `;
+    const [emp,setemp] = useState({ 'idTodisplay': "" });
+ const history = useHistory();
+  const navigateTo = () => history.push(`/read/${data.employee.id}`);
 
     const [empId, setEmpId] = useState({ 'idToDelete': "" });
+  
+ 
 
     const DELETE_Employee = gql`
     mutation DeleteEmployee($id: String!){
@@ -120,7 +138,9 @@ export const ListOfEmployee = () => {
 }
 `;
 
-const { loading, error, data} = useQuery(Show);
+
+const { loading, error, data} = useQuery(Show,GetEmployeeById);
+
 
 const [deleteMutation] = useMutation(DELETE_Employee);
    
@@ -129,28 +149,45 @@ const [deleteMutation] = useMutation(DELETE_Employee);
             setEmpId({ 'idToDelete': deleteId });
             console.log("handleDelte", deleteId, empId);
             deleteMutation({ variables: { id: deleteId } });
-
         }
         else {
 
         }
     };
-    
+
+    //  const handleInputChange = event => {
+    //     const { value } = event.target
+    //     this.props.userSearchInput(value);
+    //     this.setState({
+    //         query: value
+    //     });
+    // };
+
     if (loading) return <p>Loading ...</p>;
     if (error) return <p>Error</p>;
   
     return (
 
         <Fragment>
-            {/* <Navbar bgColor="powderblue" color="black">
-                    <Logo src={require("../images/Logo.png")} /> 
-                    Beeja
-                </Navbar>  */}
             <Navbar bgColor="grey" color="white">
                 List of Employee
-                    <Button >
+                
+                
+                <LinkTag to={`/display/${id}`} >
+                    <FontAwesomeIcon   icon={faSearch}  >
+                        
+                    {/* <LinkTag to={`/read/${emId.id}`} >emp.id</LinkTag> */}
+                    </FontAwesomeIcon>
+                    </LinkTag>
+                  {/* <input type="text" placeholder="search" value={data.id}  ></input>
+                   */}
+                  
+                
+
+                 <Button >
                     <LinkTag to={"/adding"}>Add Employee</LinkTag>
                 </Button>
+                
             </Navbar>
             <Break />
             <Container>
@@ -158,7 +195,7 @@ const [deleteMutation] = useMutation(DELETE_Employee);
                     <TableRow>
                         <TableHeading> ID</TableHeading>
                         <TableHeading>Employee Name</TableHeading>
-                        <TableHeading>Code</TableHeading>
+                        <TableHeading>EmployeeCode</TableHeading>
                         <TableHeading>Email</TableHeading>
                         <TableHeading>Role</TableHeading>
                         <TableHeading>Department</TableHeading>
@@ -170,13 +207,13 @@ const [deleteMutation] = useMutation(DELETE_Employee);
 
                     {data.employeeList.map((employee, id) => (
                         <TableRow>
-                            <a href="">
+                            
                         <LinkTag to={`/display/${employee.id}`}>
-                               <Hover> 
+                               
                                    <TableData key={id}>{employee.id}</TableData>
-                               </Hover>
+                               
                                 </LinkTag>
-                                </a>
+                                
                             
                             <TableData>{employee.name}</TableData>
                             <TableData>{employee.code}</TableData>

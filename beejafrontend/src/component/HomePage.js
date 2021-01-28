@@ -82,7 +82,11 @@ export const HomePage = () => {
                     </Navbar>
             <Table>
                 <TableRow>
-                    <TableRow><TableData> HR</TableData></TableRow>
+                    <TableRow><TableData>
+                        <LinkTag to ={"/hr"}>
+                         HR
+                         </LinkTag>
+                         </TableData></TableRow>
                     <TableRow><TableData> ACCOUNTING</TableData></TableRow>
                     <TableRow><TableData>
                         <LinkTag to={"/list"} >

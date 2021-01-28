@@ -185,6 +185,8 @@ export const EditEmployee = () => {
                             <Option disabled selected value> Select an Option</Option>
                             <Option value="ADMIN"> ADMIN </Option>
                             <Option value="SUPER ADMIN"> SUPER ADMIN </Option>
+                            <Option value="DEVOPS"> DEVOPS</Option>
+                            <Option value="QA-TEST"> QA-TEST</Option>
                             <Option value="ACCOUNTANT"> ACCOUNTANT </Option>
                             <Option value="SOFTWARE ENGINEER"> SOFTWARE ENGINEER </Option>
                             <Option value="SENIOR-SOFTWARE ENGINEER"> SENIOR-SOFTWARE ENGINEER </Option>
