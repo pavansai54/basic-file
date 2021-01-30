@@ -3,8 +3,7 @@ import React, { Component, Fragment, useState } from 'react'
 import Styled from '@emotion/styled';
 import { Link, useParams } from 'react-router-dom';
 import { useMutation, gql, useQuery } from '@apollo/client';
-import { ListOfEmployee } from './ListOfEmployee';
-import { graphql } from 'graphql';
+
 
 const Navbar = Styled.nav`
 background-color: ${(props) => props.bgColor};
@@ -186,7 +185,7 @@ export const EditEmployee = () => {
                             <Option value="ADMIN"> ADMIN </Option>
                             <Option value="SUPER ADMIN"> SUPER ADMIN </Option>
                             <Option value="DEVOPS"> DEVOPS</Option>
-                            <Option value="QA-TEST"> QA-TEST</Option>
+                            <Option value="QA-ENGINEER"> QA-ENGINEER</Option>
                             <Option value="ACCOUNTANT"> ACCOUNTANT </Option>
                             <Option value="SOFTWARE ENGINEER"> SOFTWARE ENGINEER </Option>
                             <Option value="SENIOR-SOFTWARE ENGINEER"> SENIOR-SOFTWARE ENGINEER </Option>

@@ -75,13 +75,6 @@ const IdButton = Styled.button`
 border:none;
 outline:none;
     `;
-
-
-// const TriangleButton = Styled(Actionbutton)`
-// border-left: 7px solid transparent;
-// border-right:7px solid transparent;
-// border-top: 6px dashed;
-// `;
 const LinkTag = Styled(Link)`
 color:black;
 text-decoration:none;
@@ -155,13 +148,7 @@ const [deleteMutation] = useMutation(DELETE_Employee);
         }
     };
 
-    //  const handleInputChange = event => {
-    //     const { value } = event.target
-    //     this.props.userSearchInput(value);
-    //     this.setState({
-    //         query: value
-    //     });
-    // };
+    
 
     if (loading) return <p>Loading ...</p>;
     if (error) return <p>Error</p>;
@@ -174,10 +161,10 @@ const [deleteMutation] = useMutation(DELETE_Employee);
                 
                 
                 <LinkTag to={`/display/${id}`} >
-                    <FontAwesomeIcon   icon={faSearch}  >
-                        
+                    {/* <FontAwesomeIcon   icon={faSearch}  >
+                         */}
                     {/* <LinkTag to={`/read/${emId.id}`} >emp.id</LinkTag> */}
-                    </FontAwesomeIcon>
+                    {/* </FontAwesomeIcon> */}
                     </LinkTag>
                   {/* <input type="text" placeholder="search" value={data.id}  ></input>
                    */}
@@ -194,29 +181,28 @@ const [deleteMutation] = useMutation(DELETE_Employee);
                 <Table>
                     <TableRow>
                         <TableHeading> ID</TableHeading>
-                        <TableHeading>Employee Name</TableHeading>
-                        <TableHeading>EmployeeCode</TableHeading>
+                        <TableHeading>Name</TableHeading>
+                        
                         <TableHeading>Email</TableHeading>
                         <TableHeading>Role</TableHeading>
                         <TableHeading>Department</TableHeading>
                         <TableHeading>JoiningDate</TableHeading>
-                        <TableHeading>MobileNumber</TableHeading>
+                        <TableHeading>Mobile NO</TableHeading>
                         <TableHeading>Edit</TableHeading>
                         <TableHeading>Delete</TableHeading>
                     </TableRow>
 
                     {data.employeeList.map((employee, id) => (
                         <TableRow>
-                            
-                        <LinkTag to={`/display/${employee.id}`}>
-                               
-                                   <TableData key={id}>{employee.id}</TableData>
-                               
-                                </LinkTag>
+                            <LinkTag to={`/display/${employee.id}`}>
+                            <TableData>{employee.code}</TableData>
+                            </LinkTag>
+
+                       
                                 
                             
                             <TableData>{employee.name}</TableData>
-                            <TableData>{employee.code}</TableData>
+                            
                             <TableData>{employee.email}</TableData>
                             <TableData>{employee.role}</TableData>
                             <TableData>{employee.department}</TableData>

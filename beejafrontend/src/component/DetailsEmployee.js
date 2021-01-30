@@ -3,7 +3,6 @@ import React, { Component, Fragment, useState } from 'react'
 import Styled from '@emotion/styled';
 import { Link, useParams } from 'react-router-dom';
 import { useMutation, gql, useQuery } from '@apollo/client';
-import { graphql } from 'graphql';
 
 const Navbar = Styled.nav`
 background-color: ${(props) => props.bgColor};
@@ -69,9 +68,21 @@ text-decoration:none;
 `;
 
 
-export const EmployeeDetails = () => {
+export const DetailsEmployee = () => {
 
-    const { id } = useParams();
+    const { id ,code} = useParams();
+
+    
+    const [empState, setState] = useState({
+        username: "",
+        code: "",
+        email: " ",
+        mobileNo: "",
+        department: "",
+        role: "",
+        joinedDate:""
+    })
+
     const GetEmployeeById = gql`
     query EmpDetails($id:String!){
         employee(id:$id){
@@ -86,11 +97,30 @@ export const EmployeeDetails = () => {
     }
     `;
 
+    const EmployeeEdit = gql`
+     mutation UpdateEmployee($id: String!){
+         updateEmployee(id: $id,data: {
+              name:"${empState.username}",
+              code:"${empState.code}",
+              email:"${empState.email}",
+              mobileNo:"${empState.mobileNo}",
+              department:"${empState.department}",
+              role:"${empState.role}",
+             joinedDate:"${empState.joinedDate}"   
+           })
+           {
+              respCode, respMessage
+                  }
+              }
+          `;
     const { loading, error, data } = useQuery(GetEmployeeById, { variables: { id: id } });
 
-    
+    const [EditMutation,] = useMutation(EmployeeEdit);
     if (loading) return <p>Loading....</p>
     if (error) return <p>ERROR....</p>
+
+
+    
 
 
   
@@ -141,7 +171,7 @@ export const EmployeeDetails = () => {
                     </TableRow>
                     <Break />
                     <TableRow>
-                        <TableColumn > <Lable htmlFor="Date-Containerat" className="Selectbox1"> Join Date</Lable></TableColumn>
+                        <TableColumn > <Lable htmlFor="Date-Container" className="Selectbox1"> Join Date</Lable></TableColumn>
                         <TableColumn>:<Input value={data.employee.joinedDate} readOnly/></TableColumn>
                     </TableRow>
                     <Break />

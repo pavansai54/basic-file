@@ -1,13 +1,11 @@
-import React, { Component, Fragment } from 'react'
+import React ,{Fragment} from 'react';
 import Styled from '@emotion/styled';
-// import ListsofEmployees from "./ListOfEmployee";
+
 import { Link } from 'react-router-dom';
-import { useQuery, gql, useMutation } from '@apollo/client';
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
-import './images/mobile_black.png';
+
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
 
 const Navbar = Styled.nav`
 background-color: ${(props) => props.bgColor};
@@ -45,6 +43,8 @@ const TableRow = Styled.tr`
 border: 3px solid #ddd;
  &:nth-child(even){background-color: #F2F2F2;}
 `;
+
+
 const Button = Styled.button`
 color:black;
 background-color: ${props =>
@@ -54,50 +54,45 @@ font-size:20px;
 width:80px;
 border-radius:5px;
 &:hover {
-opacity:0.5;
+opacity:0.5; 
 `;
 
 
- 
-    window.onpopstate= function()
-    {
-        alert("Are you sure want to leave this page");
-    }
-    
-export const HomePage = () => {
-
-  
-    return (
+export const Hr = () => {
+    return(
+       
         
         <Fragment>
-            {/* <Navbar bgColor="powderblue" color="black">
-                    <Logo src={require("./images/mobile_black.png") } /> Beeja
-                </Navbar> */}
-            <Navbar bgColor="grey" color="white" text="center">
-                Home page
-                    </Navbar>
-            <Table>
+       
+        <Navbar bgColor="grey" color="white" text="center">
+            HR
+                </Navbar>
+                <Table>
                 <TableRow>
                     <TableRow><TableData>
                         <LinkTag to ={"/hr"}>
-                         HR
+                         LEAVE MANGEMENT
                          </LinkTag>
                          </TableData></TableRow>
-                    <TableRow><TableData> ACCOUNTING</TableData></TableRow>
+            
                     <TableRow><TableData>
-                        <LinkTag to={"/list"} >
-                            EMOPLOYEE DIRECTORY
+                        <LinkTag to={""} >
+                         LEAVE POLICY
                              </LinkTag>
                     </TableData></TableRow>
-                    <TableRow><TableData> CLIENT</TableData></TableRow>
+                    <TableRow><TableData> <LinkTag to={'/personal'} >  PERSONAL DETAILS </LinkTag></TableData></TableRow>
+                    <TableRow ><TableData>
+                
+                        OFFER LETTER & INCREMENT
+                        </TableData></TableRow>
                     
                     <TableRow ><TableData>
                 
-                        DOCUMENTATION
+                        DOCUMENTS
                         </TableData></TableRow>
                              
                 </TableRow>
             </Table>
-        </Fragment>
+    </Fragment>
     )
 }

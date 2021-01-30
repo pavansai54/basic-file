@@ -3,7 +3,6 @@ import Styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
 import { useMutation, gql } from '@apollo/client';
 import { ToastContainer, toast } from 'react-toastify';
-import { Multiselect } from 'multiselect-react-dropdown';
 import 'react-toastify/dist/ReactToastify.css';
 
 // import {gql} from 'graphql-tag'
@@ -71,43 +70,49 @@ color:black;
 text-decoration:none;
 `;
 
-export const CreateEmployee = () => {
+export const CreatePersonal = () => {
 
     const [formData, createFormData] = useState({
         username:"",
         code: "",
+        // address:"",
         email: " ",
-        mobileNO: "",
-        department: "",
+        bankaccno: "",
+        bank: "",
         role: "",
-        joinDate: ""
+        ifsccode: "",
+        PAN: ""
     });
 
-    const EmployeeList = gql`
+    const PersonalList = gql`
      mutation {
-         createEmployee(data: {
+         createPersonal(data: {
               name:"${formData.username}",
               code:"${formData.code}",
+            
               email:"${formData.email}",
-              mobileNo:"${formData.mobileNO}",
-              department:"${formData.department}",
+              bankaccno:"${formData.bankaccno}",
+              bank:"${formData.bank}",
               role:"${formData.role}",
-             joinedDate:"${formData.joinDate}"   
+              ifsccode:"${formData.ifsccode}" ,
+              PAN:"${formData.PAN}"
+
+
            })
                   {
                       respCode, respMessage
                   }
               }
           `;
-    const [EmployeeCreate, { loading, error, data }] = useMutation(EmployeeList);
+    const [PersonalCreate, { loading, error, data }] = useMutation(PersonalList);
     if (loading) return <p>Loading ...</p>;
     if (error) return <p>Error</p>;
 
-    // toast.configure() 
-    // const remind = (message)=>{  
-    //     toast.success(message,
-    //     {position: toast.POSITION.BOTTOM_RIGHT})  
-    //   };
+    toast.configure() 
+    const remind = (message)=>{  
+        toast.success(message,
+        {position: toast.POSITION.BOTTOM_RIGHT})  
+      };
 
     const handleChange = (e) => {
         createFormData({
@@ -117,7 +122,7 @@ export const CreateEmployee = () => {
     };
     const handleSubmit = (e) => {
         e.preventDefault()
-        EmployeeCreate();
+        PersonalCreate();
         showToast();
     };
 
@@ -131,11 +136,8 @@ export const CreateEmployee = () => {
     return (
 
         <Fragment>
-            {/* <Navbar bgColor="powderblue" color="black">
-                        <Logo src={require("../images/Logo.png")}></Logo> Beeja
-                        </Navbar> */}
             <Navbar bgColor="grey" color="white">
-                Create an Employee
+               Create Personal data
                         </Navbar>
             <Break />
             <Container >
@@ -150,38 +152,21 @@ export const CreateEmployee = () => {
                         <TableColumn><Input type="text" name="code" onChange={handleChange} required /></TableColumn>
                     </TableRow>
                     <Break />
+                    {/* <TableRow>
+                        <TableColumn><Lable htmlFor="Address" > Address</Lable></TableColumn>
+                        <TableColumn><Input type="text" name="address" onChange={handleChange} required></Input></TableColumn>
+                    </TableRow> */}
                     <TableRow>
                         <TableColumn ><Lable htmlFor="Email"> Email: </Lable></TableColumn>
                         <TableColumn><Input type="email" name="email" onChange={handleChange} required /></TableColumn>
                     </TableRow>
-                    <Break />
-                    <TableRow>
-                        <TableColumn > <Lable htmlFor="Mobile Number"> Mobile Number: </Lable></TableColumn>
-                        <TableColumn><Input placeholder=" +91 " name="mobileNO" onChange={handleChange} type="number" required /></TableColumn>
-                    </TableRow>
-                    <Break />
-                    <TableRow>
-                        <TableColumn > <Lable htmlFor="Department"> Department: </Lable></TableColumn>
-                        <TableColumn><SelectBox className="Selectbox1" name="department" onChange={handleChange}
-                        required>
-                            <Option disabled selected value> Select an Option</Option>
-                            <Option value="HR"> HR </Option>
-                            <Option value="ADMIN"> ADMIN </Option>
-                            <Option value="ACCOUNTING"> ACCOUNTING </Option>
-                            <Option value="IT"> IT </Option>
-                            </SelectBox>
-                            
-                        </TableColumn>
-                    </TableRow>
-                    <Break />
+                    <Break /> 
                     <TableRow>
                         <TableColumn ><Lable htmlFor="Role"> Role: </Lable></TableColumn>
                         <TableColumn><SelectBox className="Selectbox1" name="role" onChange={handleChange} required>
                             <Option disabled selected value> Select an Option</Option>
                             <Option value="ADMIN"> ADMIN </Option>
                             <Option value="SUPER ADMIN"> SUPER ADMIN </Option>
-                            <Option value="DEVOPS"> DEVOPS</Option>
-                            <Option value="QA-ENGINEER"> QA-ENGINEER</Option>
                             <Option value="ACCOUNTANT"> ACCOUNTANT </Option>
                             <Option value="SOFTWARE ENGINEER"> SOFTWARE ENGINEER </Option>
                             <Option value="SENIOR-SOFTWARE ENGINEER"> SENIOR-SOFTWARE ENGINEER </Option>
@@ -189,20 +174,49 @@ export const CreateEmployee = () => {
                     </TableRow>
                     <Break />
                     <TableRow>
-                        <TableColumn ><Lable htmlFor="Date-Containerat" className="Selectbox1"> Join Date: </Lable></TableColumn>
-                        <TableColumn><Input type="date" placeholder="dd-mm-yyyy" name="joinDate" onChange={handleChange} required /></TableColumn>
+                        <TableColumn > <Lable > Permanent Account Number  </Lable></TableColumn>
+                        <TableColumn><Input name="PAN" size="10" onChange={handleChange} type="text" required /></TableColumn>
+                    </TableRow>
+                    <Break />
+                    {/* <TableRow>
+                        <TableColumn > <Lable htmlFor="Bank"> Bank Name</Lable></TableColumn>
+                        <TableColumn><SelectBox className="Selectbox1" name="Bank" onChange={handleChange} required>
+                            <Option disabled selected value> Select an Option</Option>
+                            <Option value="SBI">SBI </Option>
+                            <Option value="AXIS"> AXIS </Option>
+                            <Option value="ICICI"> ICICI </Option>
+                            <Option value="HDFC"> HDFC </Option>
+                        </SelectBox></TableColumn>
+                    </TableRow>
+                    <Break /> */}
+                    <TableRow>
+                        <TableColumn ><Lable htmlFor=""> ACCOUNT Number </Lable></TableColumn>
+                        <TableColumn><Input name="bankaccno" onChange={handleChange} type="text" help="this is your bank " required /></TableColumn>
+                        {/* <TableColumn><SelectBox className="Selectbox1" name="role" onChange={handleChange} required>
+                            <Option disabled selected value> Select an Option</Option>
+                            <Option value="ADMIN"> ADMIN </Option>
+                            <Option value="SUPER ADMIN"> SUPER ADMIN </Option>
+                            <Option value="ACCOUNTANT"> ACCOUNTANT </Option>
+                            <Option value="SOFTWARE ENGINEER"> SOFTWARE ENGINEER </Option>
+                            <Option value="SENIOR-SOFTWARE ENGINEER"> SENIOR-SOFTWARE ENGINEER </Option>
+                        </SelectBox></TableColumn> */}
+                    </TableRow>
+                    <Break />
+                    <TableRow>
+                        <TableColumn ><Lable htmlFor="" > IFSC CODE </Lable></TableColumn>
+                        <TableColumn><Input type="text"  name="ifsccode" onChange={handleChange} required /></TableColumn>
                     </TableRow>
                     <Break />
                     <TableRow>
                         <TableColumn >
                             <Button type="Cancel">
-                                <LinkTag to={"/list"}>Cancel</LinkTag>
+                                <LinkTag to={"/personal"}>Cancel</LinkTag>
                             </Button>
                         </TableColumn>
 
                         <TableColumn>
                             <Button onClick={handleSubmit}>
-                                <LinkTag to={"/list"}>Submit</LinkTag>
+                                <LinkTag to={"/personal"}>Submit</LinkTag>
                             </Button>
                         </TableColumn>
                     </TableRow>
