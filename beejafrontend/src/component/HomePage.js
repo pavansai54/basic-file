@@ -59,10 +59,10 @@ opacity:0.5;
 
 
  
-    window.onpopstate= function()
-    {
-        alert("Are you sure want to leave this page");
-    }
+    // window.onpopstate= function()
+    // {
+    //     alert("Are you sure want to leave this page");
+    // }
     
 export const HomePage = () => {
 

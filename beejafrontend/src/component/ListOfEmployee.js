@@ -161,13 +161,12 @@ const [deleteMutation] = useMutation(DELETE_Employee);
                 
                 
                 <LinkTag to={`/display/${id}`} >
-                    {/* <FontAwesomeIcon   icon={faSearch}  >
-                         */}
-                    {/* <LinkTag to={`/read/${emId.id}`} >emp.id</LinkTag> */}
-                    {/* </FontAwesomeIcon> */}
+                    <FontAwesomeIcon   icon={faSearch}  >
+                         <LinkTag to={`/read/`} >emp.id</LinkTag>
+                    </FontAwesomeIcon>
                     </LinkTag>
-                  {/* <input type="text" placeholder="search" value={data.id}  ></input>
-                   */}
+                  <input type="text" placeholder="search" value={data.id}  ></input>
+                  
                   
                 
 
